@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBOwIRq-k3MoNTEqiMDv2OE5bY73a57hFw",
@@ -12,42 +12,53 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth();
+const db = getFirestore(app);
 
+// Función para registrar un usuario
 export class ManageAccount {
-  register(email, password) {
+  register(email, password, name) {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((_) => {
-        window.location.href = "login.html";
-        // Mostrar alerta de registro exitoso
-        alert("Registro exitoso. Serás redirigido a la página de inicio de sesión.");
+      .then((userCredential) => {
+        // El usuario ha sido creado, obtenemos el UID del usuario
+        const user = userCredential.user;
+
+        // Ahora agregamos la información adicional en Firestore
+        setDoc(doc(db, "users", user.uid), {
+          name: name,
+          email: email,
+          createdAt: new Date()
+        }).then(() => {
+          console.log("Usuario creado y datos adicionales guardados en Firestore");
+          window.location.href = "login.html"; // Redirigir al login después del registro
+          alert("Registro exitoso. Serás redirigido a la página de inicio de sesión.");
+        }).catch((error) => {
+          console.error("Error al guardar los datos adicionales: ", error);
+          alert("Error al guardar los datos en Firestore: " + error.message);
+        });
       })
       .catch((error) => {
-        console.error(error.message);
-            // Mostrar alerta de error de registro
-            alert("Error al registrar: " + error.message);
+        console.error("Error al crear el usuario: ", error);
+        alert("Error al registrar: " + error.message);
       });
   }
 
   authenticate(email, password) {
     signInWithEmailAndPassword(auth, email, password)
       .then((_) => {
-        window.location.href = "index.html";
-        // Mostrar alerta de inicio de sesión exitoso
+        window.location.href = "index.html"; // Redirigir al index después de iniciar sesión
         alert("Has iniciado sesión correctamente. Serás redirigido a la página principal.");
       })
       .catch((error) => {
         console.error(error.message);
-                // Mostrar alerta de error de inicio de sesión
-                alert("Error al iniciar sesión: " + error.message);
+        alert("Error al iniciar sesión: " + error.message);
       });
   }
 
   signOut() {
     signOut(auth)
       .then((_) => {
-        window.location.href = "index.html";
+        window.location.href = "index.html"; // Redirigir al index después de cerrar sesión
       })
       .catch((error) => {
         console.error(error.message);
