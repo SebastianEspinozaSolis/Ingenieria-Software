@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebas
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut  } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
+// credenciales de firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBOwIRq-k3MoNTEqiMDv2OE5bY73a57hFw",
   authDomain: "ingenieria-software-ea266.firebaseapp.com",
@@ -12,14 +13,17 @@ const firebaseConfig = {
   appId: "1:949058648047:web:1fa88731382a5680b6a81a"
 };
 
+//instancia para firebase = app, autentificador = auth, firestore = db
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// las comparte en caso que los demas js lo necesiten
 export { app, auth, db };
 
-// Función para registrar un usuario
+// se exporta la clase manageaccount que las demas ocuparan por sus funciones
 export class ManageAccount {
+  // register creara un usuario en auth, y asociara nombre junto con un rol, para añadir datos al usuario añadir aqui
   register(email, password, name, role) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -47,25 +51,16 @@ export class ManageAccount {
       });
   }
 
+  // este confirma credenciales para iniciar sesion
   authenticate(email, password) {
     signInWithEmailAndPassword(auth, email, password)
       .then((_) => {
-        window.location.href = "menu.html"; // Redirigir al index después de iniciar sesión
+        window.location.href = "menu.html"; 
         alert("Has iniciado sesión correctamente. Serás redirigido a la página principal.");
       })
       .catch((error) => {
         console.error(error.message);
         alert("Error al iniciar sesión: " + error.message);
-      });
-  }
-
-  signOut() {
-    signOut(auth)
-      .then((_) => {
-        window.location.href = "login.html"; // Redirigir al index después de cerrar sesión
-      })
-      .catch((error) => {
-        console.error(error.message);
       });
   }
 }

@@ -1,9 +1,9 @@
 // Importa la clase ManageAccount desde el archivo firebaseconect.js
 import { ManageAccount } from './firebaseconect.js';
 
-// Escucha el evento submit del formulario de registro
+// toma el formulario, para cuando se toca el boton registrar una cuenta
 document.getElementById("register-form").addEventListener("submit", (event) => {
-  event.preventDefault(); // Previene la acción predeterminada del formulario
+  event.preventDefault();
 
   // Obtiene los valores de los campos del formulario
   const email = document.getElementById("email").value;
@@ -12,7 +12,5 @@ document.getElementById("register-form").addEventListener("submit", (event) => {
   const role = document.getElementById("role").value;
   // Crea una instancia de la clase ManageAccount y llama al método register
   const account = new ManageAccount();
-  account.register(email, password, name,role); // Ahora solo pasas los parámetros correctos
-
-  console.log('Formulario de Registro');
+  account.register(email, password, name,role); // y se le pasan los valores 
 });
