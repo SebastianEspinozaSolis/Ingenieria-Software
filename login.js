@@ -1,4 +1,3 @@
-//ingresar en el head del login.html
 import { ManageAccount } from './firebaseconect.js';
 
 document.getElementById("formulario-sesion").addEventListener("submit", (event) => {
@@ -9,7 +8,4 @@ document.getElementById("formulario-sesion").addEventListener("submit", (event) 
 
   const account = new ManageAccount();
   account.authenticate(email, password);
-  
 });
-
-console.log('Formulario de Inicio de Sesión');

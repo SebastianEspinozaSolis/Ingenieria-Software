@@ -9,10 +9,10 @@ document.getElementById("register-form").addEventListener("submit", (event) => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const name = document.getElementById("name").value;
-
+  const role = document.getElementById("role").value;
   // Crea una instancia de la clase ManageAccount y llama al método register
   const account = new ManageAccount();
-  account.register(email, password, name); // Ahora solo pasas los parámetros correctos
+  account.register(email, password, name,role); // Ahora solo pasas los parámetros correctos
 
   console.log('Formulario de Registro');
 });
