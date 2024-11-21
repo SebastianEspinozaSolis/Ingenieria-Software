@@ -18,42 +18,58 @@ document.getElementById("logout-btn").addEventListener("click", () => {
 // Verificar si el usuario está autenticado
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // Si el usuario está autenticado, cargamos los documentos
+    // en caso que lo este muestre los documentos
     cargarDocumentos();
   } else {
-    // Si no está autenticado, lo redirigimos a la página de login
+    // de lo contrario, enviarlo a iniciar sesion
     window.location.href = "login.html";
   }
 });
 
-// Función para cargar documentos desde Firestore
-async function cargarDocumentos() {
-  const documentosLista = document.getElementById("documentos-lista");
+// Referencias a los campos de filtro y botón
+const filtros = {
+  tipo: document.getElementById("filtro-tipo"),
+  estado: document.getElementById("filtro-estado"),
+  fecha: document.getElementById("filtro-fecha"),
+  transportista: document.getElementById("filtro-transportista"),
+  licencia: document.getElementById("filtro-licencia"),
+};
+const btnFiltrar = document.getElementById("btn-filtrar");
 
-  // Limpiar la lista antes de agregar nuevos documentos
+// Función para cargar documentos desde Firestore
+async function cargarDocumentos(filtrosAplicados = {}) {
+  const documentosLista = document.getElementById("documentos-lista");
   documentosLista.innerHTML = "";
 
   try {
-    // Obtiene los documentos de la colección 'documentos' en Firestore
     const querySnapshot = await getDocs(collection(db, "documentos"));
 
     if (querySnapshot.empty) {
       console.warn("No se encontraron documentos.");
     }
 
-    // Recorre cada documento y muestra la información en tarjetas
     querySnapshot.forEach((doc) => {
       const data = doc.data();
 
-      // Formatea la fecha de creación si está disponible
+      // Filtrar documentos
+      if (
+        (filtrosAplicados.tipo && !data.tipo?.toLowerCase().includes(filtrosAplicados.tipo.toLowerCase())) ||
+        (filtrosAplicados.estado && !data.estado?.toLowerCase().includes(filtrosAplicados.estado.toLowerCase())) ||
+        (filtrosAplicados.fecha && !data.fechaCreacion?.toDate().toLocaleDateString().includes(filtrosAplicados.fecha)) ||
+        (filtrosAplicados.transportista && !data.transportista?.nombre?.toLowerCase().includes(filtrosAplicados.transportista.toLowerCase())) ||
+        (filtrosAplicados.licencia && !data.transportista?.licencia?.toLowerCase().includes(filtrosAplicados.licencia.toLowerCase()))
+      ) {
+        return; // Ignorar documentos que no cumplen los filtros
+      }
+
+      // Formatea la fecha
       const fecha = data.fechaCreacion && data.fechaCreacion.toDate
         ? data.fechaCreacion.toDate().toLocaleDateString()
         : "Fecha no disponible";
 
-      // Crea una tarjeta para mostrar cada documento
+      // Crear card de documento
       const card = document.createElement("div");
       card.classList.add("col-md-4", "mb-3");
-
       card.innerHTML = `
         <div class="card shadow-sm">
           <div class="card-body">
@@ -73,11 +89,21 @@ async function cargarDocumentos() {
           </div>
         </div>
       `;
-
-      // Añade la tarjeta a la lista de documentos
       documentosLista.appendChild(card);
     });
   } catch (error) {
     console.error("Error al cargar documentos:", error);
   }
 }
+
+// Al tocar filtrar que aplique los filtros y recargue los documentos que cumplen
+btnFiltrar.addEventListener("click", () => {
+  const filtrosAplicados = {
+    tipo: filtros.tipo.value.trim(),
+    estado: filtros.estado.value.trim(),
+    fecha: filtros.fecha.value.trim(),
+    transportista: filtros.transportista.value.trim(),
+    licencia: filtros.licencia.value.trim(),
+  };
+  cargarDocumentos(filtrosAplicados);
+});

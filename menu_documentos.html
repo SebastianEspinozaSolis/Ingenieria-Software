@@ -24,7 +24,33 @@
       <hr>
       <!-- Botón para crear un documento -->
       <a href="crear_documento.html" class="btn btn-primary btn-sm mb-3">Agregar documento</a>
-      
+       <!-- Formulario de filtros -->
+       <div id="filtros" class="mb-3">
+        <div class="row mb-2">
+          <div class="col-md-6">
+            <input id="filtro-tipo" type="text" class="form-control" placeholder="Filtrar por tipo (ej: Factura)">
+          </div>
+          <div class="col-md-6">
+            <input id="filtro-estado" type="text" class="form-control" placeholder="Filtrar por estado (ej: Activo)">
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-6">
+            <input id="filtro-fecha" type="text" class="form-control" placeholder="Filtrar por fecha (ej: 20-11-2024)">
+          </div>
+          <div class="col-md-6">
+            <input id="filtro-transportista" type="text" class="form-control" placeholder="Filtrar por transportista (ej: Juan Pérez)">
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-6">
+            <input id="filtro-licencia" type="text" class="form-control" placeholder="Filtrar por licencia (ej: A5)">
+          </div>
+        </div>
+        <div class="text-end">
+          <button id="btn-filtrar" class="btn btn-secondary">Aplicar Filtros</button>
+        </div>
+      </div>
       <!-- Contenedor para la lista de documentos -->
       <div id="documentos-lista" class="row">
         <!-- Aquí se cargarán los documentos desde JavaScript -->
