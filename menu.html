@@ -11,7 +11,7 @@
 <body class="bg-light">
   <!-- Encabezado para cerrar sesión -->
   <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-    <h1 class="h5 m-0"></h1>
+    <h1 class="h5 m-0">Menu Principal</h1>
     <div>
       <button id="logout-btn" class="btn btn-danger btn-sm">Cerrar Sesión</button>
     </div>
@@ -22,12 +22,31 @@
     <div class="card shadow-sm p-4" style="width: 100%; max-width: 900px;">
       <!-- Saludo con nombre -->
       <h2 id="bienvenida" class="text-center mb-4">Cargando...</h2>
-      <hr>
-      <h3 class="text-center mt-4">Documentos</h3>
-      <!-- Pantalla para crear documento -->
-      <a href="crear_documento.html" class="btn btn-primary btn-sm mb-3">Agregar documento</a>
-      <!-- Contenedor desde el que en el js se cargan los documentos -->
-      <div id="documentos-lista" class="row"></div>
+      <div class="container d-flex justify-content-center align-items-center">
+        <div class="row w-100">
+          <!-- Tarjeta: Menú de Documentos -->
+          <div class="col-md-4 mb-4">
+            <div class="card shadow">
+              <div class="card-body">
+                <h5 class="card-title">Menú de Documentos</h5>
+                <p class="card-text">Gestiona documentos. Agrega, consulta o edita la información de los documentos disponibles.</p>
+                <a href="menu_documentos.html" class="btn btn-primary">Ir al Menú de Documentos</a>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Tarjeta: Menú de Vehículos -->
+          <div class="col-md-4 mb-4">
+            <div class="card shadow">
+              <div class="card-body">
+                <h5 class="card-title">Menú de Vehículos</h5>
+                <p class="card-text">Administra los vehículos registrados. Agrega nuevos o consulta su estado y detalles.</p>
+                <a href="menu_vehiculos.html" class="btn btn-secondary">Ir al Menú de Vehículos</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
