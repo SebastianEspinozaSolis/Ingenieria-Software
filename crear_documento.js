@@ -2,7 +2,7 @@ import { auth, db } from './firebaseconect.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { collection, addDoc, doc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-// se toma el form
+// Se toma el form
 document.getElementById("documento-form").addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -13,10 +13,6 @@ document.getElementById("documento-form").addEventListener("submit", async (even
   const nombre = document.getElementById("nombre").value;
   const licencia = document.getElementById("licencia").value;
   const contacto = document.getElementById("contacto").value;
-  const matricula = document.getElementById("matricula").value;
-  const modelo = document.getElementById("modelo").value;
-  const capacidad = document.getElementById("capacidad").value;
-  const estadoVehiculo = document.getElementById("estadoVehiculo").value;
 
   // Verificar si el usuario está autenticado
   onAuthStateChanged(auth, async (user) => {
@@ -43,19 +39,13 @@ document.getElementById("documento-form").addEventListener("submit", async (even
           transportista: {
             nombre: nombre,
             licencia: licencia,
-            contacto: contacto,
-            vehiculo: {
-              matricula: matricula,
-              modelo: modelo,
-              capacidad: capacidad,
-              estado: estadoVehiculo
-            }
+            contacto: contacto
           },
           creadoPor: nombreCreador  // Guardamos el nombre del creador
         });
 
         alert("Documento creado exitosamente");
-        window.location.href = "menu.html"; // Redirigir al menú
+        window.location.href = "menu_documentos.html"; // Redirigir al menú
       } catch (error) {
         console.error("Error al crear el documento:", error);
         alert("Error al crear el documento: " + error.message);

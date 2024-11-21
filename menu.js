@@ -2,7 +2,6 @@ import { auth, db } from './firebaseconect.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { doc, getDoc, collection, getDocs, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-// Toma el botón de cerrar sesión y usa signOut de Firebase
 document.getElementById("logout-btn").addEventListener("click", () => {
   signOut(auth)
     .then(() => {
@@ -15,7 +14,8 @@ document.getElementById("logout-btn").addEventListener("click", () => {
     });
 });
 
-// Usa función de Firebase Auth para determinar el usuario que está activo
+
+// Usuario autenticado
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     const userDocRef = doc(db, "users", user.uid);
@@ -24,9 +24,6 @@ onAuthStateChanged(auth, async (user) => {
     if (userDoc.exists()) {
       const userData = userDoc.data();
       document.getElementById("bienvenida").textContent = `¡Bienvenido, ${userData.name}!`;
-      
-      // Cargar documentos de la colección 'documentos'
-      cargarDocumentos();
     } else {
       console.error("No se encontraron datos del usuario.");
       document.getElementById("bienvenida").textContent = "Error al cargar los datos del usuario.";
@@ -35,6 +32,7 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "login.html";
   }
 });
+
 
 // Función para cargar los documentos desde Firestore
 async function cargarDocumentos() {
@@ -170,3 +168,4 @@ window.eliminarDocumento = (docId) => {
     });
   }
 };
+

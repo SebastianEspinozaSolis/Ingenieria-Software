@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú de Vehículos</title>
+  <script type="module" src="menu_vehiculos.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <!-- Encabezado para cerrar sesión -->
+  <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+    <h1 class="h5 m-0">Menú Vehículos</h1>
+    <div>
+      <button id="logout-btn" class="btn btn-danger btn-sm">Cerrar Sesión</button>
+    </div>
+  </header>
+
+  <!-- Contenido principal centrado -->
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 900px;">
+      <!-- Título de la página -->
+      <h3 class="text-center mb-4">Menú de Vehículos</h3>
+      <hr>
+      <!-- Botón para crear un vehículo -->
+      <a href="crear_vehiculo.html" class="btn btn-primary btn-sm mb-3">Agregar Vehículo</a>
+      <!-- Formulario de filtros para vehículos -->
+      <div id="filtros" class="mb-3">
+        <div class="row mb-2">
+          <div class="col-md-6">
+            <input id="filtro-modelo" type="text" class="form-control" placeholder="Filtrar por modelo (ej: NKR)">
+          </div>
+          <div class="col-md-6">
+            <input id="filtro-matricula" type="text" class="form-control" placeholder="Filtrar por matrícula (ej: GK SB 78)">
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-6">
+            <input id="filtro-capacidad" type="text" class="form-control" placeholder="Filtrar por capacidad (ej: 200 litros)">
+          </div>
+          <div class="col-md-6">
+            <input id="filtro-estado" type="text" class="form-control" placeholder="Filtrar por estado (ej: En reparación)">
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-6">
+            <input id="filtro-nombre-trabajador" type="text" class="form-control" placeholder="Filtrar por nombre del trabajador (ej: Marco)">
+          </div>
+          <div class="col-md-6">
+            <input id="filtro-licencia" type="text" class="form-control" placeholder="Filtrar por licencia del trabajador (ej: A5)">
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-6">
+            <input id="filtro-fecha" type="text" class="form-control" placeholder="Filtrar por fecha (ej: 20-11-2024)">
+          </div>
+        </div>
+        <div class="text-end mt-2">
+          <button id="btn-filtrar" class="btn btn-secondary">Aplicar Filtros</button>
+        </div>
+      </div>
+
+      <!-- Contenedor para la lista de vehículos -->
+      <div id="vehiculos-lista" class="row">
+        <!-- Aquí se cargarán los vehículos desde JavaScript -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
