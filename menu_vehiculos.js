@@ -67,9 +67,9 @@ async function cargarVehiculos(filtrosAplicados = {}) {
         return; // Ignorar vehículos que no cumplen los filtros
       }
 
-      // Formatear fecha
-      const fecha = data.fecha && data.fecha.toDate
-        ? data.fecha.toDate().toLocaleDateString()
+      // Formatea la fecha
+      const fecha = data.fechaCreacion && data.fechaCreacion.toDate
+        ? data.fechaCreacion.toDate().toLocaleDateString()
         : "Fecha no disponible";
 
       // Crea una card para mostrar cada vehículo
