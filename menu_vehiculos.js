@@ -1,6 +1,6 @@
 import { auth, db } from './firebaseconect.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
 // Botón de cerrar sesión
 document.getElementById("logout-btn").addEventListener("click", () => {
@@ -18,10 +18,10 @@ document.getElementById("logout-btn").addEventListener("click", () => {
 // Verificar si el usuario está autenticado
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // en caso que lo este, muestre los vehículos
+    // en caso que lo esté, muestre los vehículos
     cargarVehiculos();
   } else {
-    // de lo contrario, enviarlo a iniciar sesion
+    // de lo contrario, enviarlo a iniciar sesión
     window.location.href = "login.html";
   }
 });
@@ -46,15 +46,14 @@ async function cargarVehiculos(filtrosAplicados = {}) {
   try {
     const querySnapshot = await getDocs(collection(db, "vehiculos"));
 
-    // mira si la coleccion tiene o no datos
     if (querySnapshot.empty) {
       console.warn("No se encontraron vehículos.");
     }
-    // si los tiene comienza a recorrer cada documento y usar sus datos 
+
     querySnapshot.forEach((doc) => {
       const data = doc.data();
 
-      // Filtros de vehículos, en caso que los tenga
+      // Filtrar vehículos
       if (
         (filtrosAplicados.modelo && !data.modelo?.toLowerCase().includes(filtrosAplicados.modelo.toLowerCase())) ||
         (filtrosAplicados.matricula && !data.matricula?.replace(/\s+/g, '').toLowerCase().includes(filtrosAplicados.matricula.replace(/\s+/g, '').toLowerCase())) ||
@@ -72,10 +71,9 @@ async function cargarVehiculos(filtrosAplicados = {}) {
         ? data.fechaCreacion.toDate().toLocaleDateString()
         : "Fecha no disponible";
 
-      // Crea una card para mostrar cada vehículo
+      // Crear card de vehículo
       const card = document.createElement("div");
       card.classList.add("col-md-4", "mb-3");
-
       card.innerHTML = `
         <div class="card shadow-sm">
           <div class="card-body">
@@ -101,8 +99,12 @@ async function cargarVehiculos(filtrosAplicados = {}) {
             <h6 class="card-subtitle mb-2 text-muted">Información adicional</h6>
             <p class="card-text">
               <strong>Fecha de Creación:</strong> ${fecha}<br>
-              <strong>Creado por:</strong> ${data.creadoPor|| "N/A"}<br>
+              <strong>Creado por:</strong> ${data.creadoPor || "N/A"}<br>
             </p>
+            <div class="d-flex justify-content-between mt-3">
+              <button class="btn btn-warning btn-sm btn-editar" data-id="${doc.id}">Editar</button>
+              <button class="btn btn-danger btn-sm btn-eliminar" data-id="${doc.id}">Eliminar</button>
+            </div>
           </div>
         </div>
       `;
@@ -125,4 +127,34 @@ btnFiltrar.addEventListener("click", () => {
     fecha: filtros.fecha.value.trim(),
   };
   cargarVehiculos(filtrosAplicados);
+});
+
+// Manejador de eventos para editar y eliminar vehículos
+const vehiculosLista = document.getElementById("vehiculos-lista");
+vehiculosLista.addEventListener("click", async (event) => {
+  const target = event.target;
+  const vehiculoId = target.getAttribute("data-id");
+  // editar
+  if (target.classList.contains("btn-editar")) {
+    // Redirigir a la página de edición con el ID del vehículo
+    window.location.href = `editar_vehiculo.html?id=${vehiculoId}`;
+  // eliminar
+  } else if (target.classList.contains("btn-eliminar")) {
+    // Confirmar la eliminación
+    const confirmar = confirm("¿Estás seguro de que deseas eliminar este vehículo?");
+    if (confirmar) {
+      try {
+        await deleteDoc(doc(db, "vehiculos", vehiculoId));
+        alert("Vehículo eliminado con éxito.");
+        cargarVehiculos(); // Recargar la lista de vehículos
+      } catch (error) {
+        console.error("Error al eliminar vehículo:", error);
+        alert("Hubo un error al eliminar el vehículo.");
+      }
+    }
+  }
+});
+// Manejar el evento del botón para regresar al menú
+document.getElementById("regresar-btn").addEventListener("click", () => {
+  window.location.href = "menu.html"; // Redirige al menú
 });

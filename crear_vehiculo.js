@@ -1,6 +1,30 @@
 import { auth, db } from './firebaseconect.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { collection, addDoc, doc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+// Botón de cerrar sesión
+document.getElementById("logout-btn").addEventListener("click", () => {
+  signOut(auth)
+  .then(() => {
+      window.location.href = "login.html";
+      alert("Has cerrado sesión correctamente.");
+  })
+  .catch((error) => {
+      console.error("Error al cerrar sesión:", error);
+      alert("Hubo un problema al cerrar sesión.");
+  });
+});
+
+// Verificar si el usuario está autenticado
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+      // en caso que lo este muestre los documentos
+      cargarDocumentos();
+  } else {
+    // de lo contrario, enviarlo a iniciar sesion
+    window.location.href = "login.html";
+  }
+});
 
 // Se toma el formulario
 document.getElementById("vehiculo-form").addEventListener("submit", async (event) => {
