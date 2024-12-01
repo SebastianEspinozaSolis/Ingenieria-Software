@@ -38,6 +38,8 @@ export class ManageAccount {
           createdAt: new Date()
         }).then(() => {
           console.log("Usuario creado y datos adicionales guardados en Firestore");
+          // Cerrar sesión inmediatamente después de crear el usuario
+          signOut(auth).then(() => {});
           window.location.href = "login.html"; // Redirigir al login después del registro
           alert("Registro exitoso. Serás redirigido a la página de inicio de sesión.");
         }).catch((error) => {
