@@ -1,6 +1,15 @@
 // Importa la clase ManageAccount desde el archivo firebaseconect.js
 import { ManageAccount } from './firebaseconect.js';
+import { auth } from './firebaseconect.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
+// Verifica si el usuario ya está autenticado
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Si el usuario está autenticado, redirigir a menu.html
+    window.location.href = "menu.html";
+  }
+});
 // toma el formulario, para cuando se toca el boton registrar una cuenta
 document.getElementById("register-form").addEventListener("submit", (event) => {
   event.preventDefault();
